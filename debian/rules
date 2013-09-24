@@ -41,23 +41,22 @@ override_dh_auto_clean:
 override_dh_autoreconf_clean:
 	dh_autoreconf_clean
 
-override_dh_auto_build:
+override_dh_auto_build-arch:
 	dh_auto_build -- main
 
-override_dh_auto_install:
+override_dh_auto_install-arch:
 	$(MAKE) install-nodoc DESTDIR=$(CURDIR)/debian/tmp
-	dh_link -pruby2.0 usr/bin/ruby2.0 usr/bin/$(DEB_HOST_MULTIARCH)-ruby2.0
+	# remove RPATH from tcltklib bindings
+	chrpath --delete $(CURDIR)/debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/ruby/2.0.0/tcltklib.so
+	# handle embedded copy of jquery
+	$(RM) $(CURDIR)/debian/tmp/usr/lib/ruby/2.0.0/rdoc/generator/template/darkfish/js/jquery.js
+	dh_link -plibruby2.0 /usr/share/javascript/jquery/jquery.min.js /usr/lib/ruby/2.0.0/rdoc/generator/template/darkfish/js/jquery.js
+	# sanity check
 	debian/sanity_check
 
 override_dh_auto_build-indep:
 	$(MAKE) docs
 
-# No tests needed for docs
-override_dh_auto_test-indep:
-
 override_dh_auto_install-indep:
-	$(MAKE) install-doc DESTDIR=$(CURDIR)/debian/tmp
-	dh_install -pruby2.0-doc usr/share/ri
-	dh_install -pruby2.0-doc usr/share/doc/ruby-capi/html /usr/share/doc/ruby2.0-doc/
-	find debian/ruby2.0-doc/ -type d -empty
+	$(MAKE) install-doc DESTDIR=$(CURDIR)/debian/ruby2.0-doc
 
