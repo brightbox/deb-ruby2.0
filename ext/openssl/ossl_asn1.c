@@ -1,5 +1,5 @@
 /*
- * $Id: ossl_asn1.c 42215 2013-07-28 12:49:00Z nagachika $
+ * $Id: ossl_asn1.c 44659 2014-01-19 16:28:53Z nagachika $
  * 'OpenSSL for Ruby' team members
  * Copyright (C) 2003
  * All rights reserved.
@@ -624,8 +624,8 @@ ossl_asn1_default_tag(VALUE obj)
       	}
     	tmp_class = rb_class_superclass(tmp_class);
     }
-    ossl_raise(eASN1Error, "universal tag for %s not found",
-	       rb_class2name(CLASS_OF(obj)));
+    ossl_raise(eASN1Error, "universal tag for %"PRIsVALUE" not found",
+	       rb_obj_class(obj));
 
     return -1; /* dummy */
 }
