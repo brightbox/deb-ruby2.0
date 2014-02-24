@@ -1,6 +1,7 @@
 # -*- coding: us-ascii -*-
 require "open3"
 require "timeout"
+require "test/unit"
 
 module EnvUtil
   def rubybin
@@ -160,7 +161,7 @@ module Test
         code.sub!(/\A(?:\xef\xbb\xbf)?(\s*\#.*$)*(\n)?/n) {
           "#$&#{"\n" if $1 && !$2}BEGIN{throw tag, :ok}\n"
         }
-        code.force_encoding("us-ascii")
+        code.force_encoding(Encoding::UTF_8)
         verbose, $VERBOSE = $VERBOSE, nil
         yield if defined?(yield)
         case
@@ -278,8 +279,11 @@ module Test
           file ||= loc.path
           line ||= loc.lineno
         end
+        line -= 2
         src = <<eom
-  require 'test/unit';include Test::Unit::Assertions;begin;#{src}
+# -*- coding: #{src.encoding}; -*-
+  require #{__dir__.dump}'/envutil';include Test::Unit::Assertions;begin
+#{src}
   ensure
     puts [Marshal.dump($!)].pack('m'), "assertions=\#{self._assertions}"
   end

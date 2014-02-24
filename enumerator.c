@@ -8,7 +8,7 @@
 
   $Idaemons: /home/cvs/rb/enumerator/enumerator.c,v 1.1.1.1 2001/07/15 10:12:48 knu Exp $
   $RoughId: enumerator.c,v 1.6 2003/07/27 11:03:24 nobu Exp $
-  $Id: enumerator.c 42935 2013-09-13 14:18:33Z nagachika $
+  $Id: enumerator.c 44150 2013-12-12 16:02:08Z nagachika $
 
 ************************************************/
 
@@ -460,11 +460,9 @@ enumerator_each(int argc, VALUE *argv, VALUE obj)
 static VALUE
 enumerator_with_index_i(VALUE val, VALUE m, int argc, VALUE *argv)
 {
-    VALUE idx;
-    VALUE *memo = (VALUE *)m;
-
-    idx = INT2FIX(*memo);
-    ++*memo;
+    NODE *memo = (NODE *)m;
+    VALUE idx = memo->u1.value;
+    memo->u1.value = rb_int_succ(idx);
 
     if (argc <= 1)
 	return rb_yield_values(2, val, idx);
@@ -494,8 +492,11 @@ enumerator_with_index(int argc, VALUE *argv, VALUE obj)
 
     rb_scan_args(argc, argv, "01", &memo);
     RETURN_SIZED_ENUMERATOR(obj, argc, argv, enumerator_size);
-    memo = NIL_P(memo) ? 0 : (VALUE)NUM2LONG(memo);
-    return enumerator_block_call(obj, enumerator_with_index_i, (VALUE)&memo);
+    if (NIL_P(memo))
+	memo = INT2FIX(0);
+    else
+	memo = rb_to_int(memo);
+    return enumerator_block_call(obj, enumerator_with_index_i, (VALUE)NEW_MEMO(memo, 0, 0));
 }
 
 /*
