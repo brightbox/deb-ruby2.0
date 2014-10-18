@@ -85,6 +85,9 @@ override_dh_auto_install-indep:
 	$(MAKE) install-doc DESTDIR=$(CURDIR)/debian/ruby2.1-doc
 
 override_dh_install-arch:
+	# install SystemTap tapfile
+	mkdir -p $(CURDIR)/debian/tmp/usr/share/systemtap/tapset
+	sed 's|@LIBRARY_PATH@|/usr/lib/$(DEB_HOST_MULTIARCH)/libruby-2.1.so|g' $(CURDIR)/debian/libruby.stp > $(CURDIR)/debian/tmp/usr/share/systemtap/tapset/libruby2.1-$(DEB_HOST_MULTIARCH).stp
 	dh_install
 	# split Ruby/Tk files
 	$(baseruby) debian/split-tk-out.rb
