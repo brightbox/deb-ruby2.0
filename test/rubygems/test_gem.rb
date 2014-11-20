@@ -591,7 +591,7 @@ class TestGem < Gem::TestCase
     assert_equal File.join(@gemhome, 'bin'), Gem.bindir(Pathname.new(Gem.dir))
   end
 
-  def test_self_bindir_default_dir
+  def est_self_bindir_default_dir
     default = Gem.default_dir
 
     assert_equal Gem.default_bindir, Gem.bindir(default)

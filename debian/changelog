@@ -1,3 +1,9 @@
+ruby2.0 (2.0.0.481-1bbox1~trusty1) trusty; urgency=low
+
+  * New upstream release
+
+ -- John Leach <john@brightbox.co.uk>  Sun, 11 May 2014 17:24:32 +0100
+
 ruby2.0 (2.0.0.353-1bbox2) precise; urgency=low
 
   * Fixed ruby2.0 dependency on libruby2.0

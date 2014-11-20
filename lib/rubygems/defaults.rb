@@ -17,30 +17,35 @@ module Gem
   ##
   # Default home directory path to be used if an alternate value is not
   # specified in the environment
+  #
+  # Debian patch:
+  #   /var/lib/gems/{ruby version} (This is the default path in Debian system)
+  #
 
   def self.default_dir
-    path = if defined? RUBY_FRAMEWORK_VERSION then
-             [
-               File.dirname(ConfigMap[:sitedir]),
-               'Gems',
-               ConfigMap[:ruby_version]
-             ]
-           elsif ConfigMap[:rubylibprefix] then
-             [
-              ConfigMap[:rubylibprefix],
-              'gems',
-              ConfigMap[:ruby_version]
-             ]
-           else
-             [
-               ConfigMap[:libdir],
-               ruby_engine,
-               'gems',
-               ConfigMap[:ruby_version]
-             ]
-           end
-
-    @default_dir ||= File.join(*path)
+#    path = if defined? RUBY_FRAMEWORK_VERSION then
+#             [
+#               File.dirname(ConfigMap[:sitedir]),
+#               'Gems',
+#               ConfigMap[:ruby_version]
+#             ]
+#           elsif ConfigMap[:rubylibprefix] then
+#             [
+#              ConfigMap[:rubylibprefix],
+#              'gems',
+#              ConfigMap[:ruby_version]
+#             ]
+#           else
+#             [
+#               ConfigMap[:libdir],
+#               ruby_engine,
+#               'gems',
+#               ConfigMap[:ruby_version]
+#             ]
+#           end
+#
+#    @default_dir ||= File.join(*path)
+    @default_dir ||= File.join('/', 'var', 'lib', 'gems', ConfigMap[:ruby_version])
   end
 
   ##
@@ -93,12 +98,16 @@ module Gem
 
   ##
   # The default directory for binaries
+  #
+  # Debian patch:
+  #   /var/lib/gems/{ruby version}/bin is the default path in Debian system
 
   def self.default_bindir
     if defined? RUBY_FRAMEWORK_VERSION then # mac framework support
-      '/usr/bin'
+      File.join('/', 'usr', 'local', 'bin')
     else # generic install
-      ConfigMap[:bindir]
+      # ConfigMap[:bindir]
+      File.join('/', 'usr', 'local', 'bin')
     end
   end
 
