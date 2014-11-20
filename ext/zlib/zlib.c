@@ -3,7 +3,7 @@
  *
  *   Copyright (C) UENO Katsuhiro 2000-2003
  *
- * $Id: zlib.c 45096 2014-02-22 02:49:01Z nagachika $
+ * $Id: zlib.c 47500 2014-09-10 03:24:33Z usa $
  */
 
 #include <ruby.h>
@@ -2286,6 +2286,7 @@ static void
 gzfile_reset(struct gzfile *gz)
 {
     zstream_reset(&gz->z);
+    gz->z.flags |= ZSTREAM_FLAG_GZFILE;
     gz->crc = crc32(0, Z_NULL, 0);
     gz->lineno = 0;
     gz->ungetc = 0;
