@@ -963,7 +963,9 @@ libruby-2.0.so.2.0 libruby2.0 #MINVER#
  rb_parser_calloc@Base 2.0.0
  rb_parser_compile_cstr@Base 2.0.0
  rb_parser_compile_file@Base 2.0.0
+ rb_parser_compile_file_path@Base 2.0.0.598
  rb_parser_compile_string@Base 2.0.0
+ rb_parser_compile_string_path@Base 2.0.0.598
  rb_parser_dump_tree@Base 2.0.0
  rb_parser_encoding@Base 2.0.0
  rb_parser_end_seen_p@Base 2.0.0
