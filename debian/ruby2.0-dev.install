@@ -1,4 +1,4 @@
 /usr/include
-/usr/lib/*/*.so
-/usr/lib/*/*.a
-/usr/lib/*/pkgconfig
+/usr/lib/libruby-2.0.so
+/usr/lib/*.a
+/usr/lib/pkgconfig
