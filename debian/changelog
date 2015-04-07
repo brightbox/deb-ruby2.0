@@ -1,3 +1,9 @@
+ruby2.0 (2.0.0.598-1bbox2~trusty1) trusty; urgency=medium
+
+  * Remove dependency on ruby package
+
+ -- John Leach <john@brightbox.co.uk>  Tue, 07 Apr 2015 19:58:19 +0100
+
 ruby2.0 (2.0.0.598-1bbox1~trusty1) trusty; urgency=medium
 
   [ Antonio Terceiro ]
