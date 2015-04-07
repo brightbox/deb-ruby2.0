@@ -1,3 +1,15 @@
+ruby2.0 (2.0.0.643-1bbox1~lucid1) lucid; urgency=medium
+
+  * New upstream release, 2.0.0-p643
+
+ -- John Leach <john@brightbox.co.uk>  Tue, 07 Apr 2015 20:08:00 +0100
+
+ruby2.0 (2.0.0.598-1bbox2~lucid1) lucid; urgency=medium
+
+  * Remove dependency on ruby package
+
+ -- John Leach <john@brightbox.co.uk>  Tue, 07 Apr 2015 19:58:19 +0100
+
 ruby2.0 (2.0.0.598-1bbox1~lucid1) lucid; urgency=medium
 
   [ Antonio Terceiro ]
