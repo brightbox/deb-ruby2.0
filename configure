@@ -17439,8 +17439,8 @@ main ()
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
 
-case "`head -1 conftest$EXEEXT | cat -e`" in #(
-  '^?ELF'*) :
+case "`head -1 conftest$EXEEXT | tr -dc '\177ELF' | tr '\177' .`" in #(
+  .ELF*) :
     rb_cv_binary_elf=yes ;; #(
   *) :
     rb_cv_binary_elf=no ;;

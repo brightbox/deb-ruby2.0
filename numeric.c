@@ -235,9 +235,14 @@ NORETURN(static void coerce_failed(VALUE x, VALUE y));
 static void
 coerce_failed(VALUE x, VALUE y)
 {
+    if (SPECIAL_CONST_P(y) || BUILTIN_TYPE(y) == T_FLOAT) {
+	y = rb_inspect(y);
+    }
+    else {
+	y = rb_obj_class(y);
+    }
     rb_raise(rb_eTypeError, "%"PRIsVALUE" can't be coerced into %"PRIsVALUE,
-	     (rb_special_const_p(y)? rb_inspect(y) : rb_obj_class(y)),
-	     rb_obj_class(x));
+	     y, rb_obj_class(x));
 }
 
 static VALUE
@@ -3210,11 +3215,12 @@ static int
 bit_coerce(VALUE *x, VALUE *y, int err)
 {
     if (!FIXNUM_P(*y) && !RB_TYPE_P(*y, T_BIGNUM)) {
+	VALUE orig = *x;
 	do_coerce(x, y, err);
 	if (!FIXNUM_P(*x) && !RB_TYPE_P(*x, T_BIGNUM)
 	    && !FIXNUM_P(*y) && !RB_TYPE_P(*y, T_BIGNUM)) {
 	    if (!err) return FALSE;
-	    coerce_failed(*x, *y);
+	    coerce_failed(orig, *y);
 	}
     }
     return TRUE;
