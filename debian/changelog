@@ -1,3 +1,9 @@
+ruby2.0 (2.0.0.645-1bbox1~lucid1) lucid; urgency=medium
+
+  * New upstream release, 2.0.0-p645
+
+ -- John Leach <john@brightbox.co.uk>  Tue, 14 Apr 2015 17:57:47 +0100
+
 ruby2.0 (2.0.0.643-1bbox1~lucid1) lucid; urgency=medium
 
   * New upstream release, 2.0.0-p643
