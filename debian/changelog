@@ -1,3 +1,10 @@
+ruby2.0 (2.0.0.647-1bbox1~trusty1) trusty; urgency=medium
+
+  * New upstream release
+  * Fixes CVE-2015-3900
+
+ -- John Leach <john@brightbox.co.uk>  Tue, 01 Sep 2015 17:47:43 +0100
+
 ruby2.0 (2.0.0.645-1bbox1~trusty1) trusty; urgency=medium
 
   * New upstream release, 2.0.0-p645
