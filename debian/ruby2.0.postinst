@@ -4,10 +4,10 @@ set -e
 
 if [ "$1" = "configure" ]
 then
-        update-alternatives --install /usr/bin/gem gem /usr/bin/gem2.0 180
+        update-alternatives --install /usr/bin/gem gem /usr/bin/gem2.0 181
         RUBYVER=2.0
         update-alternatives \
-		--install /usr/bin/ruby ruby /usr/bin/ruby${RUBYVER} 50 \
+		--install /usr/bin/ruby ruby /usr/bin/ruby${RUBYVER} 51 \
         --slave /usr/bin/erb erb /usr/bin/erb${RUBYVER} \
         --slave /usr/bin/testrb testrb /usr/bin/testrb${RUBYVER} \
         --slave /usr/bin/rake rake /usr/bin/rake${RUBYVER} \
