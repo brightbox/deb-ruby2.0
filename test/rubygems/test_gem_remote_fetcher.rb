@@ -236,6 +236,46 @@ gems:
     dns.verify
   end
 
+  def test_api_endpoint_ignores_trans_domain_values_that_end_with_original_in_path
+    uri = URI.parse "http://example.com/foo"
+    target = MiniTest::Mock.new
+    target.expect :target, "evil.com/a.example.com"
+
+    dns = MiniTest::Mock.new
+    dns.expect :getresource, target, [String, Object]
+
+    fetch = Gem::RemoteFetcher.new nil, dns
+    assert_equal URI.parse("http://example.com/foo"), fetch.api_endpoint(uri)
+
+    target.verify
+    dns.verify
+  end
+
+  def test_api_endpoint_timeout_warning
+    uri = URI.parse "http://gems.example.com/foo"
+
+    dns = MiniTest::Mock.new
+    def dns.getresource arg, *rest
+      raise Resolv::ResolvError.new('timeout!')
+    end
+
+    fetch = Gem::RemoteFetcher.new nil, dns
+    begin
+      old_verbose, Gem.configuration.verbose = Gem.configuration.verbose, 1
+      endpoint = use_ui @ui do
+        fetch.api_endpoint(uri)
+      end
+    ensure
+      Gem.configuration.verbose = old_verbose
+    end
+
+    assert_equal uri, endpoint
+
+    assert_equal "Getting SRV record failed: timeout!\n", @ui.output
+
+    dns.verify
+  end
+
   def test_cache_update_path
     uri = URI 'http://example/file'
     path = File.join @tempdir, 'file'
