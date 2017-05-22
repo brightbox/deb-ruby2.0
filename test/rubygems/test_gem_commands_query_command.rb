@@ -139,16 +139,16 @@ pl (1)
     assert_equal '', @ui.error
   end
 
-  def test_execute_details_platform
-    @a1.platform = 'x86-linux'
+  def test_execute_details_cleans_text
+    spec_fetcher do |fetcher|
+      fetcher.spec 'a', 2 do |s|
+        s.summary = 'This is a lot of text. ' * 4
+        s.authors = ["Abraham Lincoln \u0001", "\u0002 Hirohito"]
+        s.homepage = "http://a.example.com/\u0003"
+      end
 
-    @a2.summary = 'This is a lot of text. ' * 4
-    @a2.authors = ['Abraham Lincoln', 'Hirohito']
-    @a2.homepage = 'http://a.example.com/'
-    @a2.platform = 'universal-darwin'
-
-    util_clear_gems
-    util_setup_spec_fetcher @a1, @a2, @pl1
+      fetcher.legacy_platform
+    end
 
     @cmd.handle_options %w[-r -d]
 
@@ -164,8 +164,8 @@ a (2, 1)
     Platforms:
         1: x86-linux
         2: universal-darwin
-    Authors: Abraham Lincoln, Hirohito
-    Homepage: http://a.example.com/
+    Authors: Abraham Lincoln ., . Hirohito
+    Homepage: http://a.example.com/.
 
     This is a lot of text. This is a lot of text. This is a lot of text.
     This is a lot of text.

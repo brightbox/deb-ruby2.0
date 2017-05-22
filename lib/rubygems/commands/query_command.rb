@@ -193,7 +193,7 @@ class Gem::Commands::QueryCommand < Gem::Command
         end
       end
 
-      output << make_entry(matching_tuples, platforms)
+      output << clean_text(make_entry(matching_tuples, platforms))
     end
   end
 
