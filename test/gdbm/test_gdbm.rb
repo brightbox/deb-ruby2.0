@@ -47,6 +47,8 @@ if defined? GDBM
     end
 
     def test_delete_rdonly
+      skip("skipped because root can open anything") if Process.uid == 0
+
       if /^CYGWIN_9/ !~ SYSTEM
         assert_raise(GDBMError) {
           @gdbm_rdonly.delete("foo")
@@ -223,6 +225,8 @@ if defined? GDBM
     end
 
     def test_s_open_error
+    skip if Process.uid == 0 # because root can open anything
+
       assert_instance_of(GDBM, gdbm = GDBM.open("#{@tmpdir}/#{@prefix}", 0))
       assert_raise(Errno::EACCES, Errno::EWOULDBLOCK) {
         GDBM.open("#{@tmpdir}/#{@prefix}", 0)

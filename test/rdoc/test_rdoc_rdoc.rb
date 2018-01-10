@@ -221,6 +221,7 @@ class TestRDocRDoc < RDoc::TestCase
 
   def test_parse_file_forbidden
     skip 'chmod not supported' if Gem.win_platform?
+    skip("skipped because root can read anything") if Process.uid == 0
 
     @rdoc.store = RDoc::Store.new
 

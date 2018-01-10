@@ -396,7 +396,7 @@ gems:
     assert File.exist?(a1_cache_gem)
   end
 
-  unless win_platform? # File.chmod doesn't work
+  unless win_platform? || Process.uid == 0 # File.chmod doesn't work
     def test_download_local_read_only
       FileUtils.mv @a1_gem, @tempdir
       local_path = File.join @tempdir, @a1.file_name
