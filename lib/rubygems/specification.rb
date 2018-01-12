@@ -912,7 +912,7 @@ class Gem::Specification
     Gem.load_yaml
 
     input = normalize_yaml_input input
-    spec = YAML.load input
+    spec = Gem::SafeYAML.safe_load input
 
     if spec && spec.class == FalseClass then
       raise Gem::EndOfYAMLException
