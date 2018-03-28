@@ -319,5 +319,45 @@ puts Tempfile.new('foo').path
       assert_equal(0600, t.stat.mode & 0777)
     end
   end
-end
 
+  def test_open_with_block
+    path = nil
+    Tempfile.open("tempfile-create") {|f|
+      path = f.path
+      assert(File.exist?(path))
+    }
+  end
+
+  def test_open_without_block
+    path = nil
+    f = Tempfile.open("tempfile-create")
+    path = f.path
+    assert(File.exist?(path))
+    f.close
+    assert(File.exist?(path))
+  ensure
+    f.close if f && !f.closed?
+    File.unlink path if path
+  end
+
+  TRAVERSAL_PATH = Array.new(Dir.pwd.split('/').count, '..').join('/') + Dir.pwd + '/'
+
+  def test_open_traversal_dir
+    expect = Dir.glob(TRAVERSAL_PATH + '*').count
+    t = Tempfile.open([TRAVERSAL_PATH, 'foo'])
+    actual = Dir.glob(TRAVERSAL_PATH + '*').count
+    assert_equal expect, actual
+  ensure
+    t.close!
+  end
+
+  def test_new_traversal_dir
+    expect = Dir.glob(TRAVERSAL_PATH + '*').count
+    t = Tempfile.new(TRAVERSAL_PATH + 'foo')
+    actual = Dir.glob(TRAVERSAL_PATH + '*').count
+    assert_equal expect, actual
+  ensure
+    t.close!
+  end
+
+end
