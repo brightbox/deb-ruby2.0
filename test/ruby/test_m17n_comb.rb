@@ -733,6 +733,7 @@ class TestM17NComb < Test::Unit::TestCase
       glibcver = `#{glibcpath}`[/\AGNU C Library.*version ([0-9.]+)/, 1].split('.').map(&:to_i)
       strict_crypt = (glibcver <=> [2, 16]) > -1
     rescue
+      strict_crypt = true # Assume 2.16 or later nowadays
     end
 
     combination(STRINGS, STRINGS) {|str, salt|
