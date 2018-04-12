@@ -388,6 +388,7 @@ class TestPathname < Test::Unit::TestCase
       Dir.mkdir("f/g")
       File.symlink("f/g", "h")
       assert_equal("#{dir}/f/g", realpath("h"))
+			next if File.readable?("f")
       File.chmod(0000, "f")
       assert_raise(Errno::EACCES) { realpath("h") }
       File.chmod(0755, "f")
