@@ -25,27 +25,34 @@ class TestWEBrickServer < Test::Unit::TestCase
 
   def test_start_exception
     stopped = 0
-    config = {
-      :StopCallback => Proc.new{ stopped += 1 },
-    }
 
-    e = assert_raises(SignalException) do
-      TestWEBrick.start_server(Echo, config) { |server, addr, port, log|
-        listener = server.listeners.first
+    log = []
+    logger = WEBrick::Log.new(log, WEBrick::BasicLog::WARN)
 
-        def listener.accept
-          raise SignalException, 'SIGTERM' # simulate signal in main thread
-        end
+    assert_raises(SignalException) do
+      listener = Object.new
+      def listener.to_io # IO.select invokes #to_io.
+        raise SignalException, 'SIGTERM' # simulate signal in main thread
+      end
+      def listener.shutdown
+      end
+      def listener.close
+      end
 
-        Thread.pass while server.status != :Running
+      server = WEBrick::HTTPServer.new({
+        :BindAddress => "127.0.0.1", :Port => 0,
+        :StopCallback => Proc.new{ stopped += 1 },
+        :Logger => logger,
+      })
+      server.listeners[0].close
+      server.listeners[0] = listener
 
-        TCPSocket.open(addr, port) { |sock| sock << "foo\n" }
-
-        Thread.pass until server.status == :Stop
-      }
+      server.start
     end
 
-    assert_equal(stopped, 1)
+    assert_equal(1, stopped)
+    assert_equal(1, log.length)
+    assert_match(/FATAL SignalException: SIGTERM/, log[0])
   end
 
   def test_callbacks

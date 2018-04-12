@@ -85,13 +85,12 @@ class TestWEBrickHTTPAuth < Test::Unit::TestCase
     log_tester = lambda {|log, access_log|
       assert_equal(2, log.length)
       assert_match(/ERROR Basic WEBrick's realm: foo\\ebar: the user is not allowed./, log[0])
-      assert_match(/ERROR WEBrick::HTTPStatus::Unauthorized/, log[1])
     }
     TestWEBrick.start_httpserver({}, log_tester) {|server, addr, port, log|
       realm = "WEBrick's realm"
       path = "/basic_auth"
 
-      Tempfile.create("test_webrick_auth") {|tmpfile|
+      Tempfile.open("test_webrick_auth") {|tmpfile|
         tmpfile.close
         tmp_pass = WEBrick::HTTPAuth::Htpasswd.new(tmpfile.path)
         tmp_pass.set_passwd(realm, "webrick", "supersecretpassword")
