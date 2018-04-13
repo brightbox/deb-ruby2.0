@@ -10,6 +10,13 @@ export TESTOPTS
 
 DEB_HOST_MULTIARCH := $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
+gcc48 := $(shell which gcc-4.8)
+ifdef gcc48
+CC = gcc-4.8 # same version must be in Depends of ruby2.0-dev
+else
+CC = gcc-5
+endif
+
 configure_options += --enable-multiarch
 configure_options += --target=$(DEB_HOST_MULTIARCH)
 configure_options += --program-suffix=2.0
